@@ -28,7 +28,7 @@ Scene
  */
 var updatePinState = function (forceUnpin) {
 	if (_pin && _controller) {
-		var 
+		var
 			containerInfo = _controller.info(),
 			pinTarget = _pinOptions.spacer.firstChild; // may be pin element or another spacer, if cascading pins
 
@@ -46,7 +46,7 @@ var updatePinState = function (forceUnpin) {
 				scrollDistance = _options.reverse || _options.duration === 0 ?
 								 	 containerInfo.scrollPos - _scrollOffset.start // quicker
 								 : Math.round(_progress * _options.duration * 10)/10; // if no reverse and during pin the position needs to be recalculated using the progress
-			
+
 			// add scrollDistance
 			fixedPos[containerInfo.vertical ? "top" : "left"] += scrollDistance;
 
@@ -64,7 +64,7 @@ var updatePinState = function (forceUnpin) {
 					left: 0
 				},
 				change = _util.css(pinTarget, "position") != newCSS.position;
-			
+
 			if (!_pinOptions.pushFollowers) {
 				newCSS[containerInfo.vertical ? "top" : "left"] = _options.duration * _progress;
 			} else if (_options.duration > 0) { // only concerns scenes with duration
@@ -131,7 +131,9 @@ var updatePinDimensions = function () {
 			css["padding" + (vertical ? "Top" : "Left")] = _options.duration * _progress;
 			css["padding" + (vertical ? "Bottom" : "Right")] = _options.duration * (1 - _progress);
 		}
-		_util.css(_pinOptions.spacer, css);
+		if (pinTarget.clientHeight !== css.height) {
+		    _util.css(_pinOptions.spacer, css);
+		}
 	}
 };
 
@@ -178,8 +180,8 @@ var onMousewheelOverPin = function (e) {
 };
 
 /**
- * Pin an element for the duration of the tween.  
- * If the scene duration is 0 the element will only be unpinned, if the user scrolls back past the start position.  
+ * Pin an element for the duration of the tween.
+ * If the scene duration is 0 the element will only be unpinned, if the user scrolls back past the start position.
  * Make sure only one pin is applied to an element at the same time.
  * An element can be pinned multiple times, but only successively.
  * _**NOTE:** The option `pushFollowers` has no effect, when the scene duration is 0._
@@ -193,7 +195,7 @@ var onMousewheelOverPin = function (e) {
  *
  * @param {(string|object)} element - A Selector targeting an element or a DOM object that is supposed to be pinned.
  * @param {object} [settings] - settings for the pin
- * @param {boolean} [settings.pushFollowers=true] - If `true` following elements will be "pushed" down for the duration of the pin, if `false` the pinned element will just scroll past them.  
+ * @param {boolean} [settings.pushFollowers=true] - If `true` following elements will be "pushed" down for the duration of the pin, if `false` the pinned element will just scroll past them.
  												   Ignored, when duration is `0`.
  * @param {string} [settings.spacerClass="scrollmagic-pin-spacer"] - Classname of the pin spacer element, which is used to replace the element.
  *
@@ -225,10 +227,10 @@ this.setPin = function (element, settings) {
 			// kill old pin
 			Scene.removePin();
 		}
-		
+
 	}
 	_pin = element;
-	
+
 	var
 		parentDisplay = _pin.parentNode.style.display,
 		boundsParams = ["top", "left", "bottom", "right", "margin", "marginLeft", "marginRight", "marginTop", "marginBottom"];
@@ -281,7 +283,7 @@ this.setPin = function (element, settings) {
 		pushFollowers: settings.pushFollowers,
 		inFlow: inFlow, // stores if the element takes up space in the document flow
 	};
-	
+
 	if (!_pin.___origStyle) {
 		_pin.___origStyle = {};
 		var
@@ -300,7 +302,7 @@ this.setPin = function (element, settings) {
 		_util.css(spacer, {height: sizeCSS.height});
 	}
 
-	// now place the pin element inside the spacer	
+	// now place the pin element inside the spacer
 	spacer.appendChild(_pin);
 	// and set new css
 	_util.css(_pin, {
@@ -311,7 +313,7 @@ this.setPin = function (element, settings) {
 		bottom: "auto",
 		right: "auto"
 	});
-	
+
 	if (_pinOptions.relSize.width || _pinOptions.relSize.autoFullWidth) {
 		_util.css(_pin, {
 			boxSizing : "border-box",
